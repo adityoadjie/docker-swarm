@@ -15,7 +15,7 @@ Untuk menginisialisasi swarm mode digunakan perintah init
 
 setelah menjalankan command, docker engine akan tahu bagaimana bekerja dengan cluster dan menjadi manager. Hasil inisialisasi adalah token yang digunakan untuk menambahkan node dengan aman.
 
-gambar 1
+**![alt text](pictures/Screenshot_1.jpg)**
 
 ## Join Cluster
 
@@ -27,14 +27,14 @@ Hal pertama yang dilakukan setelahnya adalah mendapatkan token yang dibutuhkan u
 
 ` token=$(docker -H 172.17.0.12:2345 swarm join-token -q worker) && echo $token `
 
-gambar 2
+**![alt text](pictures/Screenshot_2.jpg)**
 
 pada host kedua, gabungkan ke cluster dengan me-request akses melalui manager. Token disediakan sebagai parameter tambahan
 
 ` docker swarm join 172.17.0.12:2377 --token $token `
 
-gambar 3
+**![alt text](pictures/Screenshot_3.jpg)**
 
 Secara default, manager akan secara otomatis menerima nodes baru yang dimasukkan dalam cluster. Untuk melihat node pada cluster digunakan perintah `docker node ls`
 
-gambar 4
+**![alt text](pictures/Screenshot_4.jpg)**
