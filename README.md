@@ -38,3 +38,19 @@ pada host kedua, gabungkan ke cluster dengan me-request akses melalui manager. T
 Secara default, manager akan secara otomatis menerima nodes baru yang dimasukkan dalam cluster. Untuk melihat node pada cluster digunakan perintah `docker node ls`
 
 **![alt text](pictures/Screenshot_4.jpg)**
+
+## Membuat Overlay Network
+
+Perintah berikut akan membuat overlay network dengan nama skynet. Semua container yang terdaftar pada network ini dapat berkomunikasi satu dengan yang lain, tidak memandang node mana mereka di-deploy
+
+` docker network create -d overlay skynet `
+
+## Deploy Service
+
+Pada kasus ini, kita men-deploy docker image katacoda/docker-http-server. Kita mendefinisikan nama yang sederhana dari sebuah service yang disebut http dan di-attach ke network skynet yang baru dibuat.
+
+Untuk memastikan replikasi dan availability, kita menjalankan dua instances, replika dan container dari cluster.
+
+Kemudian kita melakukan load balance kepada dua container tersebut pada port 80. Mengirim HTTP request ke semua node pada cluster akan memproses request dari 1 container dalam cluster. Node dimana request diterima bisa tidak berada pada node dimana container merespons. Tetapi, request docker load-balances ditujukan pada semua container yang ada. Perintah yang digunakan adalah:
+
+` docker service create --name http --network skynet --replicas 2 -p 80:80 katacoda/docker-http-server `
