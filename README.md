@@ -54,3 +54,24 @@ Untuk memastikan replikasi dan availability, kita menjalankan dua instances, rep
 Kemudian kita melakukan load balance kepada dua container tersebut pada port 80. Mengirim HTTP request ke semua node pada cluster akan memproses request dari 1 container dalam cluster. Node dimana request diterima bisa tidak berada pada node dimana container merespons. Tetapi, request docker load-balances ditujukan pada semua container yang ada. Perintah yang digunakan adalah:
 
 ` docker service create --name http --network skynet --replicas 2 -p 80:80 katacoda/docker-http-server `
+
+## Inspect State
+
+Kita dapat melihat daftar dari semua task yang yang terhubung dengan service dari cluster. Pada hal ini, tiap task adalah container docker `service ps http`
+
+Kita dapat melihat detail konfigurasi dari service via `docker service inspect --pretty http`
+
+Pada tiap nodem kita dapat menanyakan task apa yang sedang berjalan. `docker node ps self`
+
+Menggunakan ID dari node, kita dapat meng-query host secara individu `docker node ps $(docker node ls -q | head -n1)`
+
+## Scale Service
+
+Pada saat ini, kita memiliki 2 container yang sudah di-load-balance berjalan, yang memproses request kita `curl docker`
+
+Perintah di bawah ini akan menskalakan http service kita untuk berjalan pada 5 container.
+
+`docker service scale http=5`
+
+Pada tiap host, kita akan melihat node tambahan dimulai
+Load balancer akan secara otomatis diupdate. Request akan diproses ke container baru.
